@@ -1,6 +1,6 @@
 const POSSIBLE_TYPES = ["none","rock"];
 const POSSIBLE_THINGS = ["nothing","boy","apples","apple-tree","red-cherry-tree","red-cherry","yellow-cherry-tree","yellow-cherry","stump"];
-const POSSIBLE_DIRS = ["N","S","E","W"];
+// const POSSIBLE_DIRS = ["N","S","E","W"];
 const POSSIBLE_STATES = ["walking","waiting","recovering","hitting"];
 
 class Cell
@@ -131,7 +131,7 @@ class Thing
   {
     changeClass(this.cell.getContainer(),POSSIBLE_THINGS,this.type);
     if(!!this.dir)
-    changeClass(this.cell.getContainer(),POSSIBLE_DIRS,this.dir);
+    // changeClass(this.cell.getContainer(),POSSIBLE_DIRS,this.dir);
     if(!!this.state)
     changeClass(this.cell.getContainer(),POSSIBLE_STATES,this.state);
     if(!!this.label)
@@ -246,6 +246,7 @@ const nothing = new Thing(cells[0][0],{description: "Ничего."});
 const boy = new Thing(cells[51][51],{
   type: "boy",
   dir: "S",
+  rotate: "0deg",
   state: "walking",
   name: "Я",
   necrolog: "Я умер.",
@@ -278,10 +279,45 @@ boy.turn = side =>
   boy.set("state","walking");
   switch (boy.dir+"->"+side)
   {
-    case "N->right": case "S->left": boy.set("dir","E"); break;
-    case "S->right": case "N->left": boy.set("dir","W"); break;
-    case "W->right": case "E->left": boy.set("dir","N"); break;
-    case "E->right": case "W->left": boy.set("dir","S"); break;
+    case "N->right": 
+      setBoyRotate(true);
+      boy.set("dir","E"); 
+      break;
+
+    case "S->left": 
+      setBoyRotate(false);
+      boy.set("dir","E"); 
+      break;
+
+    case "S->right": 
+      setBoyRotate(true);
+      boy.set("dir","W"); 
+      break;
+
+    case "N->left": 
+      setBoyRotate(false);
+      boy.set("dir","W"); 
+      break;
+
+    case "W->right": 
+      setBoyRotate(true);
+      boy.set("dir","N"); 
+      break;
+
+    case "E->left": 
+      setBoyRotate(false);
+      boy.set("dir","N");
+      break;
+
+    case "E->right": 
+      setBoyRotate(true);
+      boy.set("dir","S"); 
+      break;
+
+    case "W->left": 
+      setBoyRotate(false);
+      boy.set("dir","S");
+      break;
   }
 }
 
@@ -397,3 +433,16 @@ document.getElementById("fWorldSetup").addEventListener('submit', evt =>
                                               redraw();
                                             });
 });
+
+let boyCell = document.getElementById("boyCell");
+let rotate = 0;
+function setBoyRotate(isClockwise) {
+  if(isClockwise) {
+    rotate+= 90;
+  }
+  if(!isClockwise) {
+    rotate-= 90;
+  }
+  boy.rotate = rotate + "deg";
+  boyCell.style.transform = "rotate(" + boy.rotate + ")";
+}

@@ -98,7 +98,7 @@ input:invalid {border-color: red;}
 }
 .boy {
   transition: .2s;
-}
+} 
 .boy.walking {
   background-image: url(media/boy-walking.png);
 }
